@@ -1,0 +1,8 @@
+{
+  "name": "aura",
+  "version": "1.0.0",
+  "description": "Aura CLI",
+  "bin": {
+    "aura": "./bin/aura.js"
+  }
+}
