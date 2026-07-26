@@ -30,13 +30,3 @@ src/
 ├── services/
 └── utils/
 ```
-
-O `tsconfig.json` é atualizado automaticamente com:
-
-```json
-"compilerOptions": {
-  "paths": {
-    "@/*": ["./src/*"]
-  }
-}
-```

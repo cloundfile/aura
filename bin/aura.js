@@ -87,35 +87,35 @@ function runVersion() {
   return version;
 }
 
+function criarPastas(base, pastas) {
+  pastas.forEach((pasta) => {
+    const fullPath = path.join(base, "src", pasta);
+    fs.mkdirSync(fullPath, { recursive: true });
+    console.log(`  📁 src/${pasta}/ criado`);
+  });
+}
+
+function ajustarTsconfig(projeto) {
+  const tsconfigPath = path.join(projeto, "tsconfig.json");
+  if (!fs.existsSync(tsconfigPath)) {
+    console.log("  ⚠️  tsconfig.json não encontrado, pulando...");
+    return;
+  }
+  const tsconfig = JSON.parse(fs.readFileSync(tsconfigPath, "utf-8"));
+  tsconfig.compilerOptions ??= {};
+  tsconfig.compilerOptions.paths = {
+    "@/*": ["./src/*"],
+    ...(tsconfig.compilerOptions.paths ?? {}),
+  };
+  fs.writeFileSync(tsconfigPath, JSON.stringify(tsconfig, null, 2) + "\n");
+  console.log("  ✅ tsconfig.json atualizado com paths @/*");
+}
+
 function projetar() {
   console.log("Projetando Aura...");
-
   const cwd = process.cwd();
-
-  // Cria as pastas
-  const dirs = ["screens", "services", "components", "repositories", "routes", "utils"];
-  dirs.forEach((dir) => {
-    const fullPath = path.join(cwd, "src", dir);
-    fs.mkdirSync(fullPath, { recursive: true });
-    console.log(`  📁 src/${dir}/ criado`);
-  });
-
-  // Ajusta tsconfig.json
-  const tsconfigPath = path.join(cwd, "tsconfig.json");
-  if (fs.existsSync(tsconfigPath)) {
-    const tsconfig = JSON.parse(fs.readFileSync(tsconfigPath, "utf-8"));
-    if (!tsconfig.compilerOptions) {
-      tsconfig.compilerOptions = {};
-    }
-    tsconfig.compilerOptions.paths = {
-      "@/*": ["./src/*"],
-      ...(tsconfig.compilerOptions.paths || {}),
-    };
-    fs.writeFileSync(tsconfigPath, JSON.stringify(tsconfig, null, 2) + "\n");
-    console.log("  ✅ tsconfig.json atualizado com paths @/*");
-  } else {
-    console.log("  ⚠️  tsconfig.json não encontrado, pulando...");
-  }
+  criarPastas(cwd, ["screens", "services", "components", "repositories", "routes", "utils"]);
+  ajustarTsconfig(cwd);
 }
 
 function runCommand(args, env) {
