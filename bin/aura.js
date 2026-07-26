@@ -61,7 +61,7 @@ function runCommand(args) {
 }
 
 if (command === "create") {
-  runCommand(["create-expo-app@latest", appName || ".", "--template", "blank-typescript"]);
+  runCommand(["--yes", "create-expo-app@latest", appName || ".", "--template", "blank-typescript"]);
 } else if (command === "version") {
   runVersion();
 } else if (command === "production") {
