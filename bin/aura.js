@@ -87,6 +87,37 @@ function runVersion() {
   return version;
 }
 
+function projetar() {
+  console.log("Projetando Aura...");
+
+  const cwd = process.cwd();
+
+  // Cria as pastas
+  const dirs = ["screens", "services", "components", "repositories", "routes", "utils"];
+  dirs.forEach((dir) => {
+    const fullPath = path.join(cwd, "src", dir);
+    fs.mkdirSync(fullPath, { recursive: true });
+    console.log(`  📁 src/${dir}/ criado`);
+  });
+
+  // Ajusta tsconfig.json
+  const tsconfigPath = path.join(cwd, "tsconfig.json");
+  if (fs.existsSync(tsconfigPath)) {
+    const tsconfig = JSON.parse(fs.readFileSync(tsconfigPath, "utf-8"));
+    if (!tsconfig.compilerOptions) {
+      tsconfig.compilerOptions = {};
+    }
+    tsconfig.compilerOptions.paths = {
+      "@/*": ["./src/*"],
+      ...(tsconfig.compilerOptions.paths || {}),
+    };
+    fs.writeFileSync(tsconfigPath, JSON.stringify(tsconfig, null, 2) + "\n");
+    console.log("  ✅ tsconfig.json atualizado com paths @/*");
+  } else {
+    console.log("  ⚠️  tsconfig.json não encontrado, pulando...");
+  }
+}
+
 function runCommand(args, env) {
   const child = spawn("npx", args, { stdio: "inherit", env });
   child.on("error", (err) => {
@@ -110,9 +141,12 @@ if (command === "create") {
   console.log(`Comandos disponíveis:
   aura create <nome>   - Cria um novo projeto Expo
   aura version         - Atualiza a versão do app
+  aura projetar        - Configura tsconfig.json com paths e cria pastas src
   aura preview         - Gera versão + build de preview (local)
   aura production      - Gera versão + build de produção
   aura help            - Mostra esta ajuda`);
+} else if (command === "projetar") {
+  projetar();
 } else if (command === "preview") {
   runVersion();
   runCommand(["eas", "build", "--platform", "android", "--profile", "preview", "--local"]);
