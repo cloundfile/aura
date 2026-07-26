@@ -1,6 +1,6 @@
 {
   "name": "@inneobr/aura",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Aura CLI",
   "bin": {
     "aura": "bin/aura.js"
