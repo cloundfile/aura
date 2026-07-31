@@ -1,13 +1,13 @@
 class CliView {
   help() {
     console.log(`Comandos disponíveis:
-  aura create <nome>   - Cria um novo projeto Expo
-  aura version         - Atualiza a versão do app
-  aura modular         - Configura tsconfig.json com paths e cria pastas src
-  aura preview         - Gera versão + build de preview (local)
-  aura production      - Gera versão + build de produção
-  aura help            - Mostra esta ajuda`);
-  }
+      aura create <nome>   - Cria um novo projeto Expo
+      aura version         - Atualiza a versão do app
+      aura modular         - Gera as pastas do app
+      aura preview         - Gera versão de testes local
+      aura production      - Gera versão de produção
+      aura help            - Mostra esta ajuda`);
+    }
 
   showSuccess(message) {
     console.log(message);
